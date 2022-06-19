@@ -5,6 +5,8 @@ export class User {
     gid: string;
     name: string;
     picture: string | null;
+    blocked: boolean;
+    expiredTime: number = 0;
     createdAt: Date;
     updatedAt: Date;
     deletedAt: Date | null;
