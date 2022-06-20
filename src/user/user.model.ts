@@ -7,6 +7,7 @@ export class User {
     picture: string | null;
     blocked: boolean;
     expiredTime: number = 0;
+    password: string;
     createdAt: Date;
     updatedAt: Date;
     deletedAt: Date | null;

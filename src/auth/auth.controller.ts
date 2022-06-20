@@ -25,6 +25,10 @@ export class AuthController {
                     data: 'user found'
                 }
 
+            case 'local':
+                const token = await this.loginService.loginLocal(loginDto.credential);
+                return token;
+
             default:
                 throw new UnauthorizedException(`Provider '${loginDto.provider}' is denied from our service`)
         }

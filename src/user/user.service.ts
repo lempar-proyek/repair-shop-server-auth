@@ -26,26 +26,38 @@ export class UserService {
         const query = this.datastore
             .createQuery(this.kind)
             .filter('email', '=', email);
-        
+
         const [entities] = await this.datastore.runQuery(query);
 
-        if(entities.length === 0) {
+        if (entities.length === 0) {
             return null;
         }
-        return entities[0];
+
+        const foundUser: User = { ...entities[0] }
+
+        foundUser.id = entities[0][this.datastore.KEY]['id']
+        delete foundUser[this.datastore.KEY]
+
+        return foundUser;
     }
 
     async getUserByUsername(username: string): Promise<User | null> {
         const query = this.datastore
             .createQuery(this.kind)
             .filter('username', '=', username);
-        
+
         const [entities] = await this.datastore.runQuery(query);
 
-        if(entities.length === 0) {
+        if (entities.length === 0) {
             return null;
         }
-        return entities[0];
+
+        const foundUser: User = { ...entities[0] }
+
+        foundUser.id = entities[0][this.datastore.KEY]['id']
+        delete foundUser[this.datastore.KEY]
+
+        return foundUser;
     }
 
     async createUser(user: User): Promise<User> {
