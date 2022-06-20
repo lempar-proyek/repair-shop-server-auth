@@ -1,0 +1,20 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/repair-shop-management/repair-shop-server-auth', '.']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/repair-shop-management/repair-shop-server-auth']
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: gcloud
+  args: 
+  - 'run'
+  - 'deploy'
+  - 'repair-shop-auth'
+  - '--image'
+  - 'gcr.io/repair-shop-management/repair-shop-server-auth'
+  - '--region'
+  - 'asia-southeast2'
+  - '--min-instances'
+  - '0'
+
+images:
+- gcr.io/repair-shop-management/repair-shop-server-auth
