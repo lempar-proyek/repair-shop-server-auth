@@ -15,8 +15,6 @@ steps:
   - 'asia-southeast2'
   - '--min-instances'
   - '0'
-  - '--port'
-  - '3000'
   - '--allow-unauthenticated'
 
 images:
