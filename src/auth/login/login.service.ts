@@ -1,33 +1,17 @@
 import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { TokenRes } from '../token/token.res';
 import { OAuth2Client } from "google-auth-library";
-import { UserService } from 'src/user/user.service';
+import { UserService } from '../../user/user.service';
 import { compare as bcryptCompare } from "bcrypt";
-import { sign as jwtSign } from "jsonwebtoken";
-import { User } from '../../user/user.model';
 import { decode as b64Decode } from "js-base64";
+import { JwtService } from '../jwt/jwt.service';
 
 @Injectable()
 export class LoginService {
     constructor(
-        private userService: UserService
+        private userService: UserService,
+        private jwtService: JwtService,
     ) { }
-
-    async generateAccessToken(user: User): Promise<string> {
-        const now = new Date();
-        const expiresDate = new Date();
-        expiresDate.setMinutes(expiresDate.getMinutes() + 15)
-
-        const payload = {
-            iss: 'repair-shop-server',
-            aud: 'repair-shop-server',
-            sub: user.id,
-            exp: Math.floor(expiresDate.getTime() / 1000),
-            iat: Math.floor(now.getTime() / 1000),
-        };
-
-        return jwtSign(payload, 'DUMMY_SECRET');
-    }
 
     async checkIdentityExist(identity: string): Promise<boolean> {
         const foundUserByEmail = await this.userService.getUserByEmail(identity);
@@ -67,7 +51,7 @@ export class LoginService {
         }
 
         return {
-            accessToken: await this.generateAccessToken(foundUser),
+            accessToken: await this.jwtService.generateAccessToken(foundUser),
             type: 'Bearer',
             expiredIn: 900,
             refreshToken: '',
